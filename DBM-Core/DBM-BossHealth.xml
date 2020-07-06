@@ -55,10 +55,15 @@
 								</Offset>
 							</Anchor>
 						</Anchors>
-						<NormalTexture name="$parentTextureNormal" file="Interface\PaperDollInfoFrame\UI-Character-Skills-BarBorder"/>
+						<NormalTexture name="$parentTextureNormal" file="Interface\PaperDollInfoFrame\UI-Character-Skills-BarBorder"/>		<!-- Interface\PaperDollInfoFrame\UI-Character-Skills-BarBorder -->
+						<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+							<EdgeSize>
+								<AbsValue val="12"/>
+							</EdgeSize>
+						</Backdrop>
 					</Button>
 				</Frames>
-				<BarTexture name="$parentTextureBar" file="Interface\PaperDollInfoFrame\UI-Character-Skills-Bar"/>
+				<BarTexture name="$parentTextureBar" file="Interface\PaperDollInfoFrame\UI-Character-Skills-Bar"/>		<!-- Interface\AddOns\Forte_Core\Textures\Flat Interface\PaperDollInfoFrame\UI-Character-Skills-Bar -->
 				<BarColor r="1.0" g="0.7" b="0.0"/>
 				<Scripts>
 					<OnLoad>

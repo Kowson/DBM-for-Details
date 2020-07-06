@@ -197,7 +197,7 @@ options = {
 	},
 	EnlargeBarsPercent = {
 		type = "number",
-		default = 0.125,
+		default = 0.05,	-- 0.125 default
 	},
 	FillUpBars = {
 		type = "boolean",

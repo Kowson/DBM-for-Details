@@ -85,22 +85,70 @@ local function updateBarStyle(bar, id)
 	local barborder = _G[bar:GetName().."BarBorder"]
 	local barbar = _G[bar:GetName().."Bar"]
 	local width = DBM.Options.HealthFrameWidth
+	local bgtable
 	if width < 175 then -- these health frames really suck :(
 		barbar:ClearAllPoints()
 		barbar:SetPoint("CENTER", barbar:GetParent(), "CENTER", -6, 0)
 		bar:SetWidth(DBM.Options.HealthFrameWidth)
 		barborder:SetWidth(DBM.Options.HealthFrameWidth * 0.99)
 		barbar:SetWidth(DBM.Options.HealthFrameWidth * 0.95)
+		barbar:SetStatusBarTexture(DBM.Options.HealthFrameBarTexture)
+		
+		if DBM.Options.HealthFrameBarBorder == DBM.DefaultOptions.HealthFrameBarBorder then
+			barborder:SetHeight(DBM.DefaultOptions.HealthFrameHeight)
+			barborder:SetNormalTexture(DBM.DefaultOptions.HealthFrameBarBorder)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = nil
+			barborder:SetBackdrop(bgtable)
+		else
+			barborder:SetHeight(18)
+			barborder:SetNormalTexture(nil)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = DBM.Options.HealthFrameBarBorder
+			barborder:SetBackdrop(bgtable)
+		end
+		
 	elseif width >= 225 then
 		barbar:ClearAllPoints()
 		barbar:SetPoint("CENTER", barbar:GetParent(), "CENTER", 5, 0)
 		bar:SetWidth(DBM.Options.HealthFrameWidth)
 		barborder:SetWidth(DBM.Options.HealthFrameWidth * 0.995)
 		barbar:SetWidth(DBM.Options.HealthFrameWidth * 0.965)
+		barbar:SetStatusBarTexture(DBM.Options.HealthFrameBarTexture)
+		
+		if DBM.Options.HealthFrameBarBorder == DBM.DefaultOptions.HealthFrameBarBorder then
+			barborder:SetHeight(DBM.DefaultOptions.HealthFrameHeight)
+			barborder:SetNormalTexture(DBM.DefaultOptions.HealthFrameBarBorder)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = nil
+			barborder:SetBackdrop(bgtable)
+		else
+			barborder:SetHeight(18)
+			barborder:SetNormalTexture(nil)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = DBM.Options.HealthFrameBarBorder
+			barborder:SetBackdrop(bgtable)
+		end
+		
 	else
 		bar:SetWidth(DBM.Options.HealthFrameWidth)
 		barborder:SetWidth(DBM.Options.HealthFrameWidth * 0.99)
 		barbar:SetWidth(DBM.Options.HealthFrameWidth * 0.95)
+		barbar:SetStatusBarTexture(DBM.Options.HealthFrameBarTexture)
+		
+		if DBM.Options.HealthFrameBarBorder == DBM.DefaultOptions.HealthFrameBarBorder then
+			barborder:SetHeight(DBM.DefaultOptions.HealthFrameHeight)
+			barborder:SetNormalTexture(DBM.DefaultOptions.HealthFrameBarBorder)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = nil
+			barborder:SetBackdrop(bgtable)
+		else
+			barborder:SetHeight(18)
+			barborder:SetNormalTexture(nil)
+			bgtable=barborder:GetBackdrop()
+			bgtable.edgeFile = DBM.Options.HealthFrameBarBorder
+			barborder:SetBackdrop(bgtable)
+		end
 	end
 end
 

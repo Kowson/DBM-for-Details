@@ -46,7 +46,6 @@ local debuffTargets					= {}
 local debuffIcon					= 8
 
 function mod:OnCombatStart(delay)
-	DBM:FireCustomEvent("DBM_EncounterStart", 641, "Twin Val'kyr")
 	timerSpecial:Start(-delay)
 	warnSpecial:Schedule(40-delay)
 	timerAchieve:Start(-delay)
@@ -164,9 +163,9 @@ end
 
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsPlayer() and args:IsSpellID(65724, 67213, 67214, 67215) then 		-- Empowered Darkness
-		PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\nap.mp3", "Master")
+		specWarnEmpoweredDarkness:Show()
 	elseif args:IsPlayer() and args:IsSpellID(65748, 67216, 67217, 67218) then	-- Empowered Light
-		PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\nap.mp3", "Master")
+		specWarnEmpoweredLight:Show()
 	elseif args:IsSpellID(65950, 67296, 67297, 67298) then	-- Touch of Light
 		if args:IsPlayer() and self.Options.SpecialWarnOnDebuff then
 			specWarnSpecial:Show()

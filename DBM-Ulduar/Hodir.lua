@@ -5,8 +5,7 @@ mod:SetRevision(("$Revision: 4154 $"):sub(12, -3))
 mod:SetCreatureID(32845)
 mod:SetUsedIcons(8)
 
---mod:RegisterCombat("combat")
-mod:RegisterCombat("yell", L.YellPull)
+mod:RegisterCombat("combat")
 mod:RegisterKill("yell", L.YellKill)
 
 mod:RegisterEvents(
@@ -25,12 +24,12 @@ local specWarnBitingCold	= mod:NewSpecialWarningMove(62188, false)
 mod:AddBoolOption("PlaySoundOnFlashFreeze", true, "announce")
 mod:AddBoolOption("YellOnStormCloud", true, "announce")
 
-local enrageTimer			= mod:NewBerserkTimer(480)
+local enrageTimer			= mod:NewBerserkTimer(475)
 local timerFlashFreeze		= mod:NewCastTimer(9, 61968)
 local timerFrozenBlows		= mod:NewBuffActiveTimer(20, 63512)
 local timerFlashFrCD		= mod:NewCDTimer(60, 61968)
--- local timerAchieve			= mod:NewAchievementTimer(179, 3182, "TimerSpeedKill")
-local timerAchieve			= mod:NewTimer(120, "TimerSpeedKill");
+local timerAchieve			= mod:NewAchievementTimer(120, 3182, "TimerSpeedKill")
+
 mod:AddBoolOption("SetIconOnStormCloud")
 
 function mod:OnCombatStart(delay)

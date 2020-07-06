@@ -6,7 +6,7 @@ mod:SetCreatureID(32930)
 mod:SetUsedIcons(5, 6, 7, 8)
 
 mod:RegisterCombat("combat", 32930, 32933, 32934)
-mod:RegisterKill("yell", L.YellKill)
+--mod:RegisterKill("yell", L.YellKill)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED",
@@ -31,7 +31,7 @@ local warnCrunchArmor			= mod:NewTargetAnnounce(64002, 2)
 local specWarnCrunchArmor2		= mod:NewSpecialWarningStack(64002, false, 2)
 local specWarnEyebeam			= mod:NewSpecialWarningYou(63346)
 
-local timerCrunch10             = mod:NewTargetTimer(6, 63355)
+local timerCrunch10             = mod:NewTargetTimer(45, 63355)
 local timerNextOverheadSmash	= mod:NewCDTimer(15, 64003)
 local timerNextShockwave		= mod:NewCDTimer(30, 63982)
 local timerRespawnLeftArm		= mod:NewTimer(45, "timerLeftArm")

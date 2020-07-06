@@ -19,6 +19,7 @@ mod:SetUsedIcons(3, 4, 5, 6, 7, 8)
 
 
 mod:AddBoolOption("RemoveHealthBuffsInP3", false)
+mod:AddBoolOption("SoundWarnShadowStrike", false)
 
 -- Adds
 local warnAdds				= mod:NewAnnounce("warnAdds", 3, 45419)
@@ -68,7 +69,7 @@ local specWarnShadowStrike	= mod:NewSpecialWarning("SpecWarnShadowStrike", mod:I
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 645, "Anub'arak")
-	Burrowed = false 
+	Burrowed = false
 	-- Adds
 	timerAdds:Start(9-delay) 
 	warnAdds:Schedule(9-delay) 
@@ -82,6 +83,11 @@ function mod:OnCombatStart(delay)
 	if mod:IsDifficulty("heroic10") or mod:IsDifficulty("heroic25") then
 		timerShadowStrike:Start()
 		preWarnShadowStrike:Schedule(25-delay)
+		if self.Options.SoundWarnShadowStrike then
+			self:ScheduleMethod(27, "ToShadowStrike3")
+			self:ScheduleMethod(28, "ToShadowStrike2")
+			self:ScheduleMethod(29, "ToShadowStrike1")
+		end
 		self:ScheduleMethod(30-delay, "ShadowStrike")
 	end
 	-- Enrage
@@ -92,7 +98,7 @@ function mod:OnCombatEnd(wipe)
 	DBM:FireCustomEvent("DBM_EncounterEnd", 645, "Anub'arak", wipe)
 end
 
-function mod:Adds() 
+function mod:Adds()
 	if self:IsInCombat() then 
 		if not Burrowed then 
 			timerAdds:Start() 
@@ -109,7 +115,25 @@ function mod:ShadowStrike()
 		preWarnShadowStrike:Schedule(25)
 		self:UnscheduleMethod("ShadowStrike")
 		self:ScheduleMethod(30, "ShadowStrike")
+		if self.Options.SoundWarnShadowStrike then
+			self:ScheduleMethod(27, "ToShadowStrike3")
+			self:ScheduleMethod(28, "ToShadowStrike2")
+			self:ScheduleMethod(29, "ToShadowStrike1")
+		end
 	end
+end
+
+-- SOUND FUNCTIONS
+function mod:ToShadowStrike3()
+	PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\3.mp3", "Master")
+end
+
+function mod:ToShadowStrike2()
+	PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\2.mp3", "Master")
+end
+
+function mod:ToShadowStrike1()
+	PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\1.mp3", "Master")
 end
 
 local PColdTargets = {}
@@ -213,6 +237,11 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg)
 		warnSubmerge:Show()
 		warnEmergeSoon:Schedule(50)
 		timerEmerge:Start()
+		if self.Options.SoundWarnShadowStrike then
+			self:UnscheduleMethod("ToShadowStrike1")
+			self:UnscheduleMethod("ToShadowStrike2")
+			self:UnscheduleMethod("ToShadowStrike3")
+		end
 		
 	elseif msg and msg:find(L.Emerge) then
 		Burrowed = false

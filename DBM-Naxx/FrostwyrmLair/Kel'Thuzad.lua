@@ -4,7 +4,7 @@ local L		= mod:GetLocalizedStrings()
 mod:SetRevision(("$Revision: 2574 $"):sub(12, -3))
 mod:SetCreatureID(15990)
 mod:SetMinCombatTime(60)
-mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
+mod:SetUsedIcons(1, 2, 3, 4, 6)
 
 mod:RegisterCombat("yell", L.Yell)
 
@@ -22,14 +22,24 @@ local warnBlastTargets		= mod:NewTargetAnnounce(27808, 2)
 local warnFissure			= mod:NewSpellAnnounce(27810, 3)
 local warnMana				= mod:NewTargetAnnounce(27819, 2)
 local warnChainsTargets		= mod:NewTargetAnnounce(28410, 2)
+local warnMindControl		= mod:NewSoonAnnounce(28410, 1)
 
 local specwarnP2Soon		= mod:NewSpecialWarning("specwarnP2Soon")
 
 local blastTimer			= mod:NewBuffActiveTimer(4, 27808)
 local timerPhase2			= mod:NewTimer(225, "TimerPhase2")
+local timerMindControl		= mod:NewNextTimer(90, 28410)
+local timerFissure			= mod:NewNextTimer(15, 27810)
+local timerMana				= mod:NewNextTimer(20, 27819)
+local timerFrostBlast		= mod:NewNextTimer(30, 27808)
 
 mod:AddBoolOption("BlastAlarm", true)
 mod:AddBoolOption("ShowRange", true)
+mod:AddBoolOption("YellOnFissure", true, "announce")
+
+mod:SetBossHealthInfo(
+	15990, L.KelThuzad
+)
 
 local warnedAdds = false
 
@@ -41,8 +51,11 @@ function mod:OnCombatStart(delay)
 	warnedAdds = false
 	specwarnP2Soon:Schedule(215-delay)
 	timerPhase2:Start()
+	if mod:IsDifficulty("heroic25") then
+		timerMindControl:Start(317)
+	end
 	warnPhase2:Schedule(225)
-	self:Schedule(225, DBM.RangeCheck.Show, DBM.RangeCheck, 10)
+	--self:Schedule(225, DBM.RangeCheck.Show, DBM.RangeCheck, 11)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -65,9 +78,11 @@ function mod:SPELL_AURA_APPLIED(args)
 		blastTimer:Start()
 	elseif args:IsSpellID(27819) then -- Mana Bomb
 		warnMana:Show(args.destName)
-		self:SetIcon(args.destName, 8, 5.5)
+		self:SetIcon(args.destName, 6, 5.5)
+		timerMana:Start()
 	elseif args:IsSpellID(28410) then -- Chains of Kel'Thuzad
 		table.insert(chainsTargets, args.destName)
+		timerMindControl:Start()
 		self:UnscheduleMethod("AnnounceChainsTargets")
 		if #chainsTargets >= 3 then
 			self:AnnounceChainsTargets()
@@ -85,7 +100,7 @@ end
 function mod:AnnounceBlastTargets()
 	warnBlastTargets:Show(table.concat(frostBlastTargets, "< >"))
 	for i = #frostBlastTargets, 1, -1 do
-		self:SetIcon(frostBlastTargets[i], 8 - i, 4.5) 
+		self:SetIcon(frostBlastTargets[i], 4 - i, 4.5) 
 		frostBlastTargets[i] = nil
 	end
 end
@@ -93,11 +108,26 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(27810) then
 		warnFissure:Show()
+		if mod:IsDifficulty("heroic25") then
+			timerFissure:Start()
+		else
+			timerFissure:Start(25)
+		end
+		if self.Options.YellOnFissure and args.destName == UnitName("player") then
+			SendChatMessage(L.YellFissure, "SAY")
+		end
+	end
+	if args:IsSpellID(27808) then
+		if mod:IsDifficulty("heroic25") then
+			timerFrostBlast:Start()
+		else
+			timerFrostBlast:Start(45)
+		end
 	end
 end
 
 function mod:UNIT_HEALTH(uId)
-	if not warnedAdds and self:GetUnitCreatureId(uId) == 15990 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.48 then
+	if not warnedAdds and self:GetUnitCreatureId(uId) == 15990 and UnitHealth(uId) / UnitHealthMax(uId) <= 0.89 then
 		warnedAdds = true
 		warnAddsSoon:Show()
 	end
@@ -105,7 +135,7 @@ end
 
 function mod:RangeToggle(show)
 	if show then
-		DBM.RangeCheck:Show(10)
+		DBM.RangeCheck:Show(12)
 	else
 		DBM.RangeCheck:Hide()
 	end

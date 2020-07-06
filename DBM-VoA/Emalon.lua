@@ -44,7 +44,7 @@ function mod:OnCombatStart(delay)
 end
 
 function mod:OnCombatEnd(wipe)
-	DBM:FireCustomEvent("DBM_EncounterEnd", 774, "Archavon the Stone Watcher", wipe)
+	DBM:FireCustomEvent("DBM_EncounterEnd", 774, "Emalon the Storm Watcher", wipe)
 	if self.Options.RangeFrame then
 		DBM.RangeCheck:Hide()
 	end

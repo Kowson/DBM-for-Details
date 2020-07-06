@@ -22,6 +22,7 @@ local warnAirPhaseNow	= mod:NewAnnounce("WarningAirPhaseNow", 4, "Interface\\Add
 local warnLanded		= mod:NewAnnounce("WarningLanded", 4, "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")
 
 local warnDeepBreath	= mod:NewSpecialWarning("WarningDeepBreath")
+local warnStomp			= mod:NewSpellAnnounce(45185, 2)
 
 mod:AddBoolOption("WarningIceblock", true, "announce")
 
@@ -29,7 +30,8 @@ local timerDrainLife	= mod:NewCDTimer(22, 28542)
 local timerAirPhase		= mod:NewTimer(66, "TimerAir", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendUnBurrow.blp")
 local timerLanding		= mod:NewTimer(28.5, "TimerLanding", "Interface\\AddOns\\DBM-Core\\textures\\CryptFiendBurrow.blp")
 local timerIceBlast		= mod:NewTimer(9.3, "TimerIceBlast", 15876)
-
+local enrageTimer		= mod:NewBerserkTimer(600)
+local timerStomp		= mod:NewCDTimer(10, 45185)
 local noTargetTime = 0
 local isFlying = false
 
@@ -39,6 +41,7 @@ function mod:OnCombatStart(delay)
 	isFlying = false
 	warnAirPhaseSoon:Schedule(38.5 - delay)
 	timerAirPhase:Start(48.5 - delay)
+	enrageTimer:Start(-delay)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -46,8 +49,11 @@ function mod:OnCombatEnd(wipe)
 end
 
 function mod:SPELL_AURA_APPLIED(args)
-	if args:IsSpellID(28522) and args:IsPlayer() and self.Options.WarningIceblock then
+	if	args:IsSpellID(28522) and args:IsPlayer() and self.Options.WarningIceblock then
 		SendChatMessage(L.WarningYellIceblock, "YELL")
+	elseif args:IsSpellID(45185) then
+		warnStomp:Show()
+		timerStomp:Start()
 	end
 end
 

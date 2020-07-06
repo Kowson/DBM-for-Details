@@ -28,11 +28,11 @@ local specWarnLifeLeechNear 	= mod:NewSpecialWarning("SpecialWarningLLNear", fal
 local timerEnrage				= mod:NewBerserkTimer(600)
 local timerSearingFlamesCast	= mod:NewCastTimer(2, 62661)
 local timerSurgeofDarkness		= mod:NewBuffActiveTimer(10, 62662)
-local timerNextSurgeofDarkness	= mod:NewBuffActiveTimer(63, 62662)
+local timerNextSurgeofDarkness	= mod:NewBuffActiveTimer(62, 62662)
 local timerSaroniteVapors		= mod:NewNextTimer(30, 63322)
 local timerNextMarkOfTheFaceless = mod:NewNextTimer(40, 63276)
 local timerLifeLeech			= mod:NewTargetTimer(10, 63276)
-local timerHardmode				= mod:NewTimer(248, "hardmodeSpawn")
+local timerHardmode				= mod:NewTimer(249, "hardmodeSpawn")
 
 mod:AddBoolOption("YellOnLifeLeech", true, "announce")
 mod:AddBoolOption("YellOnShadowCrash", true, "announce")
@@ -104,7 +104,7 @@ function mod:OldShadowCrashTarget()
 	elseif targetname then
 		local uId = DBM:GetRaidUnitId(targetname)
 		if uId then
-			local inRange = CheckInteractDistance(uId, 4)
+			local inRange = CheckInteractDistance(uId, 2)
 			local x, y = GetPlayerMapPosition(uId)
 			if x == 0 and y == 0 then
 				SetMapToCurrentZone()

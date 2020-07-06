@@ -14,14 +14,16 @@ local warnShoutNow		= mod:NewSpellAnnounce(55543, 1)
 local warnShoutSoon		= mod:NewSoonAnnounce(55543, 3)
 local warnShieldWall	= mod:NewAnnounce("WarningShieldWallSoon", 3, 29061)
 
-local timerShout		= mod:NewNextTimer(16, 55543)
+local timerShout		= mod:NewNextTimer(12, 55543)
 local timerTaunt		= mod:NewCDTimer(20, 29060)
 local timerShieldWall	= mod:NewCDTimer(20, 29061)
+local timerUnbalancingStrike = mod:NewNextTimer(30, 26613)
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 687, "Instructor Razuvious")
 	timerShout:Start(16 - delay)
 	warnShoutSoon:Schedule(11 - delay)
+	timerUnbalancingStrike:Start(30 - delay)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -38,6 +40,8 @@ function mod:SPELL_CAST_SUCCESS(args)
 	elseif args:IsSpellID(29061) then -- ShieldWall
 		timerShieldWall:Start()
 		warnShieldWall:Schedule(15)
+	elseif args:IsSpellID(26613) then -- Unbalancing Strike
+		timerUnbalancingStrike:Start()
 	end
 end
 

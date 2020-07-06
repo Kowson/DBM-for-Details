@@ -42,6 +42,8 @@ local timerTremorCD         = mod:NewCDTimer(28, 62859)
 local timerEonarsGiftCD     = mod:NewCDTimer(45, 62584)
 local timerIronRootsCD      = mod:NewCDTimer(40, 62439)
 
+local timerSunBeamCD		= mod:NewCDTimer(40, 62211) -- Hard mode Sun Beam
+local specWarnBeamsSoon		= mod:NewSpecialWarning("WarningBeamsSoon", 3) -- Hard mode Sun Beam
 
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("PlaySoundOnFury")
@@ -51,6 +53,7 @@ local rootedPlayers     = {}
 local altIcon       = true
 local killTime      = 0
 local iconId        = 6
+local lastBeam		= 0
 
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 753, "Freya")
@@ -58,6 +61,8 @@ function mod:OnCombatStart(delay)
     table.wipe(adds)
     timerEonarsGiftCD:Start(30)
     self:ScheduleMethod(30, "EonarsGift")
+	timerSunBeamCD:Start()
+	specWarnBeamsSoon:Schedule(37)
 end
 
 function mod:OnCombatEnd(wipe)
@@ -120,6 +125,10 @@ function mod:SPELL_AURA_APPLIED(args)
             specWarnFury:Show()
         end
         timerFury:Start(args.destName)
+	elseif args:IsSpellID(62211) and args.sourceName == "Sun Beam" and GetTime() - lastBeam > 20 then
+		lastBeam = GetTime()
+		timerSunBeamCD:Start()
+		specWarnBeamsSoon:Schedule(37)
     end 
 end
 

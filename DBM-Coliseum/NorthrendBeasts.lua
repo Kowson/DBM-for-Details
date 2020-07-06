@@ -19,6 +19,7 @@ mod:RegisterEvents(
 	"UNIT_DIED"
 )
 
+local timerArmorPrePotion 	= mod:NewTimer(35, "TimerArmorPrePotion", 12727)
 -- Gormok the Impaler
 local warnImpaleOn			= mod:NewTargetAnnounce(67478, 2, nil, mod:IsTank() or mod:IsHealer())
 local warnFireBomb			= mod:NewSpellAnnounce(66317, 3, nil, false)
@@ -26,6 +27,7 @@ local WarningSnobold		= mod:NewAnnounce("WarningSnobold", 4)
 local specWarnImpale3		= mod:NewSpecialWarning("SpecialWarningImpale3")
 local specWarnAnger3		= mod:NewSpecialWarning("SpecialWarningAnger3", mod:IsTank() or mod:IsHealer())
 local specWarnFireBomb		= mod:NewSpecialWarningMove(66317)
+local specWarnSilence		= mod:NewSpecialWarning("SpecialWarningSilence")
 local timerDisarm			= mod:NewBuffActiveTimer(10, 65935, nil, false)
 local timerDismantle		= mod:NewBuffActiveTimer(10, 51722, nil, false)
 local timerNextStompCD		= mod:NewCDTimer(20, 66330) -- 15 sec. after pull, 20-25 sec. every next
@@ -138,8 +140,9 @@ function mod:GromokStartTimers()
 	if self:IsDifficulty("heroic10", "heroic25") then
 		timerNextBoss:Start(165)
 	end
-	timerNextStompCD:Start(15) --5
-	timerRisingAngerCD:Start(16) --6
+	timerNextStompCD:Start(15)
+	specWarnSilence:Schedule(13) 
+	timerRisingAngerCD:Start(16) 
 end
 
 function mod:WormsEmerge()
@@ -181,9 +184,12 @@ function mod:IcehowlStartTimers()
 	timerNextCrashCD:Start(30)
 	timerArcticBreathCD:Start(14)
 	timerWhirlCD:Start(10)
-	if self:IsDifficulty("heroic10", "heroic25") then
+	if self:IsDifficulty("heroic25") then
 		enrageTimer:Start()
-	end	
+	end
+	if self:IsDifficulty("heroic10") then
+		enrageTimer:Start(210)
+	end
 end
 
 function mod:SPELL_AURA_APPLIED(args)
@@ -281,11 +287,20 @@ function mod:SPELL_CAST_START(args)
 		warnFireBomb:Show()
 	elseif args:IsSpellID(66330, 67647, 67648, 67649) then	-- Staggering Stomp
 		timerNextStompCD:Start()
+		specWarnSilence:Schedule(19)
 	-- Acidmaw & Dreadscale
 	elseif args:IsSpellID(66794, 67644, 67645, 67646) then	-- Sweep stationary worm
 		timerSweepCD:Start()
 	elseif args:IsSpellID(66821) then						-- Molten spew
 		timerMoltenSpewCD:Start()
+		if self.Options.PlaySoundBloopers then
+			randomNumber = math.random(1,2)
+			if randomNumber == 1 then
+				PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\rzygi.mp3", "Master")
+			else
+				PlaySoundFile("Interface\\AddOns\\DBM-Core\\sounds\\rzygi2.mp3", "Master")
+			end
+		end
 	elseif args:IsSpellID(66818) then						-- Acidic Spew
 		timerAcidicSpewCD:Start()
 	elseif args:IsSpellID(66901, 67615, 67616, 67617) then	-- Paralytic Spray
@@ -368,7 +383,9 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(msg)
-	if msg == L.Phase2 or msg:find(L.Phase2) then -- Acidmaw & Dreadscale
+	if msg == L.ArmorPrePot or msg:find(L.ArmorPrePot) then
+		timerArmorPrePotion:Show()
+	elseif msg == L.Phase2 or msg:find(L.Phase2) then -- Acidmaw & Dreadscale
 		timerCombatStart:Show(15)
 		if self:IsDifficulty("heroic10", "heroic25") then
 			--local timeLeftFromP1 = 154 - timerNextBoss:GetTime()
@@ -397,6 +414,7 @@ end
 function mod:UNIT_DIED(args)
 	local cid = self:GetCIDFromGUID(args.destGUID)
 	if cid == 34796 then
+		specWarnSilence:Cancel()
 		timerRisingAngerCD:Stop()
 		timerNextStompCD:Stop()
 		timerNextImpale:Stop()

@@ -20,8 +20,9 @@ local warningLocustFaded	= mod:NewAnnounce("WarningLocustFaded", 1, 28785)
 
 local specialWarningLocust	= mod:NewSpecialWarning("SpecialLocust")
 
-local timerLocustIn			= mod:NewCDTimer(80, 28785)
-local timerLocustFade 		= mod:NewBuffActiveTimer(26, 28785)
+local timerLocustIn			= mod:NewCDTimer(55, 28785)
+local timerLocustFade 		= mod:NewBuffActiveTimer(43, 28785)
+local enrageTimer			= mod:NewBerserkTimer(300)
 
 mod:AddBoolOption("ArachnophobiaTimer", true, "timer")
 
@@ -29,8 +30,9 @@ mod:AddBoolOption("ArachnophobiaTimer", true, "timer")
 function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 673, "Anub'Rekhan")
 	if mod:IsDifficulty("heroic25") then
-		timerLocustIn:Start(90 - delay)
-		warningLocustSoon:Schedule(80 - delay)
+		timerLocustIn:Start(95 - delay)
+		warningLocustSoon:Schedule(85 - delay)
+		enrageTimer:Start(-delay)
 	else
 		timerLocustIn:Start(91 - delay)
 		warningLocustSoon:Schedule(76 - delay)
@@ -47,7 +49,7 @@ function mod:SPELL_CAST_START(args)
 		specialWarningLocust:Show()
 		timerLocustIn:Stop()
 		if mod:IsDifficulty("heroic25") then
-			timerLocustFade:Start(26)
+			timerLocustFade:Start(43)
 		else
 			timerLocustFade:Start(19)
 		end

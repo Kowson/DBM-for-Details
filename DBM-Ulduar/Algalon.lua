@@ -40,7 +40,7 @@ local specWarnCosmicSmash		= mod:NewSpecialWarningSpell(64598)
 
 local timerCombatStart		    = mod:NewTimer(8, "TimerCombatStart", 2457)
 local enrageTimer				= mod:NewBerserkTimer(360)
-local timerNextBigBang			= mod:NewNextTimer(90, 64584)
+local timerNextBigBang			= mod:NewNextTimer(90.5, 64584)
 local timerBigBangCast			= mod:NewCastTimer(8, 64584)
 local timerNextCollapsingStar	= mod:NewTimer(60, "NextCollapsingStar")
 local timerCDCosmicSmash		= mod:NewNextTimer(25.5, 62311) 
@@ -61,7 +61,7 @@ end
 
 function mod:startTimers()
 	enrageTimer:Start()
-	timerNextBigBang:Start(90)
+	timerNextBigBang:Start()
 	announcePreBigBang:Schedule(80)
 	timerCDCosmicSmash:Start(25)
 	timerNextCollapsingStar:Start(16.5)

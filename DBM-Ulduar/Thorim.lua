@@ -17,7 +17,7 @@ mod:RegisterEvents(
 
 local warnPhase2				= mod:NewPhaseAnnounce(2, 1)
 local warnStormhammer			= mod:NewTargetAnnounce(62470, 2)
-local warnLightningCharge		= mod:NewSpellAnnounce(62279, 2)
+local warnLightningCharge		= mod:NewSpellAnnounce(62466, 2)
 local warnUnbalancingStrike		= mod:NewTargetAnnounce(62130, 4)	-- nice blizzard, very new stuff, hmm or not? ^^ aq40 4tw :)
 local warningBomb				= mod:NewTargetAnnounce(62526, 4)
 
@@ -25,12 +25,11 @@ local specWarnOrb				= mod:NewSpecialWarningMove(62017)
 
 mod:AddBoolOption("AnnounceFails", false, "announce")
 
-local enrageTimer			= mod:NewBerserkTimer(369)
+local enrageTimer				= mod:NewBerserkTimer(369)
 local timerStormhammer			= mod:NewCastTimer(16, 62042)
-local timerStormhammerCD		= mod:NewCDTimer(14, 62042) 
-local timerLightningCharge	 	= mod:NewCDTimer(10, 62279) 
+local timerLightningCharge	 	= mod:NewCDTimer(16, 62466) 
 local timerUnbalancingStrike	= mod:NewCDTimer(20, 62130)
-local TimerHardmodeThorim		= mod:NewTimer(150, "TimerHardmodeThorim", 62042)
+local timerHardmode				= mod:NewTimer(150, "TimerHardmode", 62042)
 
 mod:AddBoolOption("RangeFrame")
 
@@ -40,7 +39,7 @@ function mod:OnCombatStart(delay)
 	DBM:FireCustomEvent("DBM_EncounterStart", 752, "Thorim")
 	enrageTimer:Start()
 	if self.Options.RangeFrame then
-		DBM.RangeCheck:Show(10)
+		DBM.RangeCheck:Show(12)
 	end
 	table.wipe(lastcharge) 
 end
@@ -73,11 +72,13 @@ end
 function mod:SPELL_AURA_APPLIED(args)
 	if args:IsSpellID(62042) then 					-- Storm Hammer
 		warnStormhammer:Show(args.destName)
-		timerStormhammerCD:Start()
+
 	elseif args:IsSpellID(62507) then				-- Touch of Dominion
-		TimerHardmodeThorim:Start()
+		timerHardmode:Start()
+
 	elseif args:IsSpellID(62130) then				-- Unbalancing Strike
 		warnUnbalancingStrike:Show(args.destName)
+		
 	elseif args:IsSpellID(62526, 62527) then		-- Runic Detonation
 		self:SetIcon(args.destName, 8, 5)
 		warningBomb:Show(args.destName)
@@ -86,8 +87,10 @@ end
 
 function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(62042) then 		-- Storm Hammer
-		timerStormhammerCD:Start()
 		timerStormhammer:Schedule(2)
+	elseif args:IsSpellID(62466) then   	-- Lightning Charge
+		warnLightningCharge:Show()
+		timerLightningCharge:Start()	
 	elseif args:IsSpellID(62130) then	-- Unbalancing Strike
 		timerUnbalancingStrike:Start()
 	end
@@ -98,9 +101,7 @@ function mod:CHAT_MSG_MONSTER_YELL(msg)
 	if msg == L.YellPhase2 or msg:find(L.YellPhase2) then		-- Bossfight (tank and spank)
 		warnPhase2:Show()
 		enrageTimer:Stop()
-		if (timerHardmodeThorim ~= nil) then
-			timerHardmodeThorim:Stop()
-		end
+		timerHardmode:Stop()
 		enrageTimer:Start(300)
 	elseif msg == L.YellKill or msg:find(L.YellKill) then
 		enrageTimer:Stop()

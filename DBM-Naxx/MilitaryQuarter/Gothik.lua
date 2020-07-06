@@ -15,8 +15,10 @@ local warnWaveSoon		= mod:NewAnnounce("WarningWaveSoon", 1)
 local warnRiderDown		= mod:NewAnnounce("WarningRiderDown", 4)
 local warnKnightDown	= mod:NewAnnounce("WarningKnightDown", 2)
 local warnPhase2		= mod:NewPhaseAnnounce(2, 4)
+local warnGate			= mod:NewAnnounce("warnGate", 4)
 
 local timerPhase2		= mod:NewTimer(270, "TimerPhase2", 27082) 
+local timerGate			= mod:NewTimer(150, "TimerGate", 27082)
 local timerWave			= mod:NewTimer(20, "TimerWave", 27082)
 
 local wavesNormal = {
@@ -87,6 +89,8 @@ function mod:OnCombatStart(delay)
 	wave = 0
 	timerPhase2:Start()
 	warnPhase2:Schedule(270)
+	warnGate:Show()
+	timerGate:Start()
 	timerWave:Start(25, wave + 1)
 	warnWaveSoon:Schedule(22, wave + 1, getWaveString(wave + 1))
 	self:ScheduleMethod(25, "NextWave")

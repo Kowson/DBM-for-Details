@@ -24,6 +24,7 @@ local warnHealNow	= mod:NewAnnounce("WarningHealNow", 1, 48071, false)
 local timerSpore	= mod:NewNextTimer(36, 32329)
 local timerDoom		= mod:NewNextTimer(180, 29204)
 local timerAura		= mod:NewBuffActiveTimer(17, 55593)
+local enrageTimer	= mod:NewBerserkTimer(480)
 
 mod:AddBoolOption("SporeDamageAlert", false)
 
@@ -35,6 +36,7 @@ function mod:OnCombatStart(delay)
 	doomCounter = 0
 	if mod:IsDifficulty("heroic25") then
 		sporeTimer = 18
+		enrageTimer:Start(-delay)
 	else
 		sporeTimer = 36
 	end

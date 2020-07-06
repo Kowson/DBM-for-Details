@@ -41,9 +41,10 @@ local specWarnDeafeningRoar			= mod:NewSpecialWarningSpell(64189)
 local specWarnFervor				= mod:NewSpecialWarningYou(63138)
 local specWarnFervorCast			= mod:NewSpecialWarning("SpecWarnFervorCast", mod:IsMelee())
 local specWarnMaladyNear			= mod:NewSpecialWarning("SpecWarnMaladyNear", true)
-local enrageTimer					= mod:NewBerserkTimer(900)
+
 mod:AddBoolOption("WarningSqueeze", true, "announce")
 
+local enrageTimer					= mod:NewBerserkTimer(900)
 local timerFervor					= mod:NewTargetTimer(15, 63138)
 local brainportal					= mod:NewTimer(20, "NextPortal")
 local timerLunaricGaze				= mod:NewCastTimer(4, 64163)

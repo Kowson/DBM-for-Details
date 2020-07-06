@@ -37,9 +37,9 @@ local specWarnVoid 		= mod:NewSpecialWarningMove(64675)
 local enrageTimer		= mod:NewBerserkTimer(600)
 local timerDefender 	= mod:NewTimer(30, "timerDefender")
 local timerFear			= mod:NewCastTimer(64386)
-local timerNextFear 	= mod:NewNextTimer(35, 64386)
-local timerNextSwarm 	= mod:NewNextTimer(40, 64396)
-local timerNextSonic 	= mod:NewNextTimer(50, 64688)
+local timerNextFear 	= mod:NewNextTimer(40, 64386)
+local timerNextSwarm 	= mod:NewNextTimer(48, 64396)
+local timerNextSonic 	= mod:NewNextTimer(55, 64688)
 local timerSonic		= mod:NewCastTimer(64688)
 
 mod:AddBoolOption("HealthFrame", true)
@@ -52,8 +52,8 @@ function mod:OnCombatStart(delay)
 	catLives = 9
 	enrageTimer:Start(-delay)
 	timerNextFear:Start(35-delay) 
-	timerNextSonic:Start(45-delay) 
-	timerDefender:Start(60-delay) 
+	timerNextSonic:Start(50-delay) 
+	timerDefender:Start(65-delay) 
 end
 
 function mod:OnCombatEnd(wipe)
@@ -109,7 +109,6 @@ function mod:UNIT_DIED(args)
 				DBM.BossHealth:AddBoss(34035, L.Defender:format(catLives))
 			end
 		else
-			print("else 1")
 			if self.Options.HealthFrame then
 				DBM.BossHealth:RemoveBoss(34035)
 			end

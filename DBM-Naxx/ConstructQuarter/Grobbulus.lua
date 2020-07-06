@@ -17,12 +17,14 @@ mod:RegisterEvents(
 
 local warnInjection		= mod:NewTargetAnnounce(28169, 2)
 local warnCloud			= mod:NewSpellAnnounce(28240, 2)
+local warnSlime			= mod:NewSpellAnnounce(54364, 2)
 
 local specWarnInjection	= mod:NewSpecialWarning("SpecialWarningInjection")
 
 local timerInjection	= mod:NewTargetTimer(10, 28169)
 local timerCloud		= mod:NewNextTimer(15, 28240)
-local enrageTimer		= mod:NewBerserkTimer(720)
+local timerSlime		= mod:NewNextTimer(15, 54364)
+local enrageTimer		= mod:NewBerserkTimer(420)
 
 mod:AddBoolOption("SetIconOnInjectionTarget", true)
 
@@ -85,5 +87,9 @@ function mod:SPELL_CAST_SUCCESS(args)
 	if args:IsSpellID(28240) then
 		warnCloud:Show()
 		timerCloud:Start()
+	end	
+	if args:IsSpellID(54364) then
+		warnSlime:Show()
+		timerSlime:Start()
 	end	
 end
