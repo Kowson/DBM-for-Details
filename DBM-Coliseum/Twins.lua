@@ -46,6 +46,7 @@ local debuffTargets					= {}
 local debuffIcon					= 8
 
 function mod:OnCombatStart(delay)
+	DBM:FireCustomEvent("DBM_EncounterStart", 641, "Twin Val'kyr")
 	timerSpecial:Start(-delay)
 	warnSpecial:Schedule(40-delay)
 	timerAchieve:Start(-delay)
