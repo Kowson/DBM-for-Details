@@ -7,6 +7,7 @@ mod:SetMinCombatTime(30)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 
 mod:RegisterCombat("yell", L.CombatStart)
+mod:RegisterKill("yell", L.YellKill)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED",

@@ -8,6 +8,7 @@ mod:SetUsedIcons(7, 8)
 
 --mod:RegisterCombat("combat")
 mod:RegisterCombat("yell", L.Aggro)
+mod:RegisterKill("yell", L.YellKill)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED",

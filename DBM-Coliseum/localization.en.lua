@@ -21,7 +21,8 @@ L:SetMiscLocalization{
 	Submerge	= "^%%s buries itself in the earth!",
 	Emerge 		= "^%%s getting out of the ground!",
 	Icehowl		= "Icehowl",
-	YellCharge  = "Charge on me!"
+	YellCharge  = "Charge on me!",
+	YellKill	= "The monstrous menagerie has been vanquished!"
 }
 
 L:SetOptionLocalization{
@@ -110,7 +111,8 @@ L:SetMiscLocalization{
 	FirstPull	= "Grand Warlock Wilfred Fizzlebang will summon forth your next challenge. Stand by for his entry.",
 	Aggro = "You face Jaraxxus, Eredar Lord of the Burning Legion!",
 	PortalSpawn = "Come forth, sister! Your master calls!",
-	VolcanoSpawn = "IN-FER-NO!"
+	VolcanoSpawn = "IN-FER-NO!",
+	YellKill = "Another will take my place. Your world is doomed...",
 }
 
 -------------------------
