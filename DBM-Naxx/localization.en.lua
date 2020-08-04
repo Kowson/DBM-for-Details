@@ -270,16 +270,19 @@ L:SetGeneralLocalization({
 
 L:SetOptionLocalization({
 	TimerWave			= "Show timer for next wave",
+	TimerGate			= "Show timer for gate",
 	TimerPhase2			= "Show timer for Phase 2",
 	WarningWaveSoon		= "Show pre-warning for wave",
 	WarningWaveSpawned	= "Show warning for wave spawned",
 	WarningRiderDown	= "Show warning when an Unrelenting Rider dies",
-	WarningKnightDown	= "Show warning when an Unrelenting Death Knight dies"
+	WarningKnightDown	= "Show warning when an Unrelenting Death Knight dies",
+	WarningGate			= "Show warning when gate opens"
 })
 
 L:SetTimerLocalization({
 	TimerWave	= "Wave %d",
-	TimerPhase2	= "Phase 2"
+	TimerPhase2	= "Phase 2",
+	TimerGate	= "Gate opens"
 })
 
 L:SetWarningLocalization({
