@@ -6,7 +6,7 @@ mod:SetCreatureID(32930)
 mod:SetUsedIcons(5, 6, 7, 8)
 
 mod:RegisterCombat("combat", 32930, 32933, 32934)
---mod:RegisterKill("yell", L.YellKill)
+mod:RegisterKill("yell", L.YellKill)
 
 mod:RegisterEvents(
 	"SPELL_AURA_APPLIED",
